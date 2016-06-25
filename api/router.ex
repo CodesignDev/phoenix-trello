@@ -7,5 +7,9 @@ defmodule PhoenixTrello.Router do
 
   scope "/api", PhoenixTrello do
     pipe_through :api
+
+    scope "/v1" do
+      post "/users", UsersController, :create
+    end
   end
 end
