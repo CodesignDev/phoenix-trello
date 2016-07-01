@@ -16,7 +16,9 @@ defmodule PhoenixTrello.UsersController do
         json conn, %{jwt: jwt, user: user}
 
       {:error, changeset} ->
-        json conn, %{changeset: changeset}
+        conn
+          |> put_status(:unprocessable_entity)
+          |> render("error.json", changeset: changeset)
     end
   end
 end

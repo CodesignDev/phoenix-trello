@@ -2,6 +2,9 @@ import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 import Shell from './layout/Shell';
 import Index from './containers/Index/Index';
+import AuthenticatedShell from './containers/AuthenticatedShell/AuthenticatedShell';
+// import UserLogin from './containers/Users/Login';
+import UserRegister from './components/UserRegister/UserRegister';
 
 /*
  * @param {Redux Store}
@@ -10,8 +13,13 @@ import Index from './containers/Index/Index';
  */
 export default (store) => {
   return (
-    <Route path="/" component={Shell}>
-      <IndexRoute component={Index}  />
+    <Route component={Shell}>
+      {/*<Route path="/login" component={UserLogin} />*/}
+      <Route path="/register" component={UserRegister} />
+
+      <Route path="/" component={AuthenticatedShell}>
+        <IndexRoute component={Index}  />
+      </Route>
     </Route>
   );
 };
