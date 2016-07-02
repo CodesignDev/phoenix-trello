@@ -18,6 +18,17 @@ defmodule PhoenixTrello.AuthController do
     end
   end
 
+  def delete(conn, _) do
+    {:ok, claims} = Guardian.Plug.claims(conn)
+
+    conn
+    |> Guardian.Plug.current_token
+    |> Guardian.revoke!(claims)
+
+    conn
+    |> render("delete.json")
+  end
+
   def unauthenticated(conn, _) do
     conn
     |> put_status(:forbidden)

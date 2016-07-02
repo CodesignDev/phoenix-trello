@@ -17,7 +17,7 @@ defmodule PhoenixTrello.Router do
       get "/users/me", UsersController, :me
 
       post "/auth", AuthController, :create
-#      delete "/auth", AuthController, :delete
+      delete "/auth", AuthController, :delete
     end
   end
 end

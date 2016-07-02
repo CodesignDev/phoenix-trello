@@ -21,10 +21,8 @@ class AuthenticatedShell extends Component {
     if (!currentUser) return false;
 
     return (
-      <div className="app-container">
-        <div className="main-container">
-          {children}
-        </div>
+      <div className="main-container">
+        {children}
       </div>
     );
   }

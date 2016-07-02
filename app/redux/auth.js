@@ -11,6 +11,7 @@ const initialState = {
 export const CURRENT_USER = 'current_user';
 export const AUTH_TOEKN = 'auth_token';
 export const AUTH_ERROR = 'auth_error';
+export const AUTH_LOGOUT = 'auth_logout';
 
 export function reducer(state = initialState, action = {}) {
   switch (action.type) {
@@ -24,6 +25,8 @@ export function reducer(state = initialState, action = {}) {
         ...state,
         error: action.error
       };
+    case AUTH_LOGOUT:
+      return initialState;
     default:
       return state;
   }
@@ -43,6 +46,12 @@ export function authError(error) {
   };
 }
 
+export function authLogout() {
+  return {
+    type: AUTH_LOGOUT
+  };
+}
+
 export function userLogin(email, password) {
   return dispatch => {
     const data = {
@@ -57,6 +66,21 @@ export function userLogin(email, password) {
       })
       .catch(res => {
         dispatch(authError(res.data.error));
+      });
+  }
+}
+
+export function userLogout() {
+  return dispatch => {
+    axios.delete('/api/v1/auth')
+      .then(() => {
+        localStorage.removeItem('token');
+
+        dispatch(authLogout());
+        dispatch(routerActions.push('/login'));
+      })
+      .catch(res => {
+        console.log(res.data);
       });
   }
 }

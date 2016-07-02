@@ -1,4 +1,6 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import Header from './Header/Header';
 
 /*
  * React-router's <Router> component renders <Route>'s
@@ -9,16 +11,31 @@ import React, { Component, PropTypes } from 'react';
  * A better explanation of react-router is available here:
  * https://github.com/rackt/react-router/blob/latest/docs/Introduction.md
  */
-const Shell = ({children}) => {
-  return (
-    <div className="shell">
-      {children}
-    </div>
-  );
-};
+class Shell extends Component {
+  render() {
+    const { children, currentUser, dispatch } = this.props;
+    return (
+      <div className="shell">
+        <header>
+          <Header
+            currentUser={currentUser}
+            dispatch={dispatch}
+            />
+        </header>
+        <div className="app-container">
+         {children}
+        </div>
+      </div>
+    );
+  }
+}
 
 Shell.propTypes = {
   children: PropTypes.object
 };
 
-export default Shell;
+const mapStateToProps = (state) => ({
+  currentUser: state.auth.currentUser
+});
+
+export default connect(mapStateToProps)(Shell);
