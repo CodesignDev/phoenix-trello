@@ -9,3 +9,23 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+alias PhoenixTrello.Repo
+alias PhoenixTrello.User
+
+[
+  %{
+    username: "codesign",
+    display_name: "Codesign",
+    email: "cs@cs.dev",
+    password: "test"
+  },
+  %{
+    username: "test",
+    display_name: "Test",
+    email: "test@example.com",
+    password: "test"
+  },
+]
+|> Enum.map(&User.changeset(%User{}, &1))
+|> Enum.each(&Repo.insert!(&1))
