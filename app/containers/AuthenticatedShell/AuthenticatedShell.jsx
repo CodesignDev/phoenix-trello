@@ -1,23 +1,30 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
+import { getCurrentUser } from '../../redux/auth';
 
 class AuthenticatedShell extends Component {
   componentDidMount() {
     const { dispatch, currentUser } = this.props;
+    const token = localStorage.getItem('token');
 
-    if (localStorage.getItem('token')) {
+    if (token && !currentUser) {
       dispatch(getCurrentUser());
-    } else {
+    } else if (!token) {
       dispatch(routerActions.push('/login'));
     }
   }
 
   render() {
-    const { children } = this.props;
+    const { children, currentUser } = this.props;
+
+    if (!currentUser) return false;
+
     return (
-      <div>
-        {children}
+      <div className="app-container">
+        <div className="main-container">
+          {children}
+        </div>
       </div>
     );
   }

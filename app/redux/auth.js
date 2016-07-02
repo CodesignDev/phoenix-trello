@@ -60,3 +60,16 @@ export function userLogin(email, password) {
       });
   }
 }
+
+export function getCurrentUser() {
+  return dispatch => {
+    axios.get('/api/v1/users/me')
+      .then(res => {
+        dispatch(setCurrentUser(res.data.user));
+      })
+      .catch(res => {
+        console.log(res.data);
+        dispatch(routerActions.push('/login'));
+      })
+  }
+}
