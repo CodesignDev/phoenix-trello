@@ -30,6 +30,12 @@ export function reducer(state = initialState, action = {}) {
       };
     case AUTH_LOGOUT:
       return initialState;
+    case SOCKET_CONNECTED:
+      return {
+        ...state,
+        socket: action.socket,
+        channel: action.channel
+      };
     default:
       return state;
   }
