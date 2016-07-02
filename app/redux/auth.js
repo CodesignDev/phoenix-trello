@@ -1,4 +1,5 @@
 import { routerActions } from 'react-router-redux';
+import { Socket } from 'phoenix';
 import axios from 'axios';
 
 const initialState = {
@@ -12,6 +13,7 @@ export const CURRENT_USER = 'current_user';
 export const AUTH_TOEKN = 'auth_token';
 export const AUTH_ERROR = 'auth_error';
 export const AUTH_LOGOUT = 'auth_logout';
+export const SOCKET_CONNECTED = 'socket_connected';
 
 export function reducer(state = initialState, action = {}) {
   switch (action.type) {
@@ -32,21 +34,29 @@ export function reducer(state = initialState, action = {}) {
   }
 }
 
-export function setCurrentUser(currentUser) {
+function authSetUser(currentUser) {
   return {
     type: CURRENT_USER,
     currentUser
   };
 }
 
-export function authError(error) {
+function authSetSocket(socket, channel) {
+  return {
+    type: SOCKET_CONNECTED,
+    socket,
+    channel
+  };
+}
+
+function authError(error) {
   return {
     type: AUTH_ERROR,
     error
   };
 }
 
-export function authLogout() {
+function authLogout() {
   return {
     type: AUTH_LOGOUT
   };
@@ -66,6 +76,25 @@ export function userLogin(email, password) {
       })
       .catch(res => {
         dispatch(authError(res.data.error));
+      });
+  }
+}
+
+export function setCurrentUser(user) {
+  return dispatch => {
+    dispatch(authSetUser(user));
+
+    const socket = new Socket('ws://localhost:4000/socket', {
+      params: { token: localStorage.getItem('token') },
+    });
+
+    socket.connect();
+
+    const channel = socket.channel(`user:${user.id}`);
+
+    channel.join()
+      .receive('ok', () => {
+        dispatch(authSetSocket(socket, channel));
       });
   }
 }
