@@ -1,4 +1,4 @@
-import { routerActions } from 'react-router';
+import { routerActions } from 'react-router-redux';
 import axios from 'axios';
 
 const initialState = {

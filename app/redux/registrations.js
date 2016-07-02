@@ -1,4 +1,4 @@
-import { pushPath } from 'react-router-redux';
+import { routerActions } from 'react-router-redux';
 import axios from 'axios';
 import { setCurrentUser } from './auth';
 
@@ -28,7 +28,7 @@ export function userSignup(data = null) {
 
         dispatch(setCurrentUser(res.data.user));
 
-        dispatch(pushPath('/'));
+        dispatch(routerActions.push('/'));
       })
       .catch((res) => {
         dispatch(registrationErrors(res.data.errors));

@@ -29,12 +29,12 @@ class UserLogin extends Component {
   render() {
     return (
       <div className="view-container auth new">
-        <Helmet title="Sign Up" />
+        <Helmet title="Sign In" />
         <main>
           <header>
             <div className="logo" />
           </header>
-          <form onSubmit={::this._handleSubmit()}>
+          <form onSubmit={::this._handleSubmit}>
             {::this.renderError()}
             <div className="field">
               <input ref="email" type="email" placeholder="Email" required={true} />
