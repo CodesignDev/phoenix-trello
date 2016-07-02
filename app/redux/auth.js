@@ -1,5 +1,6 @@
 import { routerActions } from 'react-router-redux';
 import { Socket } from 'phoenix';
+import url from 'url';
 import axios from 'axios';
 
 const initialState = {
@@ -84,7 +85,16 @@ export function setCurrentUser(user) {
   return dispatch => {
     dispatch(authSetUser(user));
 
-    const socket = new Socket('ws://localhost:4000/socket', {
+    const { hostname, port } = url.parse(axios.defaults.baseURL);
+    const socketURL = {
+      protocol: 'ws',
+      pathname: 'socket',
+      hostname,
+      port,
+      slashes: true
+    };
+
+    const socket = new Socket(url.format(socketURL), {
       params: { token: localStorage.getItem('token') },
     });
 
