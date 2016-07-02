@@ -10,6 +10,9 @@ defmodule PhoenixTrello.Router do
 
     scope "/v1" do
       post "/users", UsersController, :create
+
+      post "/auth", AuthController, :create
+#      delete "/auth", AuthController, :delete
     end
   end
 end
