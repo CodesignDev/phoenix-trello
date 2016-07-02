@@ -22,6 +22,10 @@ axios.defaults.baseURL = apiUrl;
 // if (initialState.auth.accessToken) {
 //   axios.defaults.headers.common.Authorization = 'Bearer ' + initialState.auth.accessToken;
 // }
+const token = localStorage.getItem('token');
+if (token) {
+  axios.defaults.headers.common['Authorization'] = token;
+}
 
 const store = configureStore(initialState, browserHistory);
 const history = syncHistoryWithStore(browserHistory, store);
