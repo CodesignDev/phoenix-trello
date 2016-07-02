@@ -1,3 +1,6 @@
+import { routerActions } from 'react-router';
+import axios from 'axios';
+
 const initialState = {
   token: null,
   currentUser: null,
@@ -7,6 +10,7 @@ const initialState = {
 
 export const CURRENT_USER = 'current_user';
 export const AUTH_TOEKN = 'auth_token';
+export const AUTH_ERROR = 'auth_error';
 
 export function reducer(state = initialState, action = {}) {
   switch (action.type) {
@@ -14,9 +18,15 @@ export function reducer(state = initialState, action = {}) {
       return {
         ...state,
         currentUser: action.currentUser
-      }
+      };
+    case AUTH_ERROR:
+      return {
+        ...state,
+        error: action.error
+      };
+    default:
+      return state;
   }
-  return state;
 }
 
 export function setCurrentUser(currentUser) {
@@ -24,4 +34,29 @@ export function setCurrentUser(currentUser) {
     type: CURRENT_USER,
     currentUser
   };
+}
+
+export function authError(error) {
+  return {
+    type: AUTH_ERROR,
+    error
+  };
+}
+
+export function userLogin(email, password) {
+  return dispatch => {
+    const data = {
+      email,
+      password
+    };
+    axios.post('/api/v1/auth', {auth: data})
+      .then(res => {
+        localStorage.setItem('token', res.data.token);
+        dispatch(setCurrentUser(res.data.user));
+        dispatch(routerActions.push('/'));
+      })
+      .catch(res => {
+        dispatch(authError(res.data.error));
+      });
+  }
 }

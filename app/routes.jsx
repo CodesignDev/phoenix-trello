@@ -3,7 +3,7 @@ import { Route, IndexRoute } from 'react-router';
 import Shell from './layout/Shell';
 import Index from './containers/Index/Index';
 import AuthenticatedShell from './containers/AuthenticatedShell/AuthenticatedShell';
-// import UserLogin from './containers/Users/Login';
+import UserLogin from './components/UserLogin/UserLogin';
 import UserRegister from './components/UserRegister/UserRegister';
 
 /*
@@ -14,7 +14,7 @@ import UserRegister from './components/UserRegister/UserRegister';
 export default (store) => {
   return (
     <Route component={Shell}>
-      {/*<Route path="/login" component={UserLogin} />*/}
+      <Route path="/login" component={UserLogin} />
       <Route path="/register" component={UserRegister} />
 
       <Route path="/" component={AuthenticatedShell}>
