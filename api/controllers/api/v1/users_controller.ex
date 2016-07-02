@@ -4,7 +4,7 @@ defmodule PhoenixTrello.UsersController do
   alias PhoenixTrello.Repo
   alias PhoenixTrello.User
 
-  plug Guardian.Plug.EnsureAuthentiacated, handler: PhoenixTrello.AuthController when action in [:me]
+  plug Guardian.Plug.EnsureAuthenticated, [handler: PhoenixTrello.AuthController] when action in [:me]
   plug :scrub_params, "user" when action in [:create]
 
   def create(conn, %{"user" => user_params}) do
