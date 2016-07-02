@@ -18,4 +18,9 @@ defmodule PhoenixTrello.AuthController do
     end
   end
 
+  def unauthenticated(conn, _) do
+    conn
+    |> put_status(:forbidden)
+    |> render("forbidden.json", error: "Not Authenticated")
+  end
 end

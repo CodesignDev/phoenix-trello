@@ -4,6 +4,7 @@ defmodule PhoenixTrello.UsersController do
   alias PhoenixTrello.Repo
   alias PhoenixTrello.User
 
+  plug Guardian.Plug.EnsureAuthentiacated, handler: PhoenixTrello.AuthController when action in [:me]
   plug :scrub_params, "user" when action in [:create]
 
   def create(conn, %{"user" => user_params}) do
@@ -20,5 +21,13 @@ defmodule PhoenixTrello.UsersController do
           |> put_status(:unprocessable_entity)
           |> render("error.json", changeset: changeset)
     end
+  end
+
+  def me(conn, _) do
+    user = Guardian.Plug.current_resource(conn)
+
+    conn
+    |> put_status(:ok)
+    |> render("show.json", user: user)
   end
 end

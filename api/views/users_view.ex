@@ -1,6 +1,10 @@
 defmodule PhoenixTrello.UsersView do
   use PhoenixTrello.Web, :view
 
+  def render("show.json", %{user: user}) do
+    %{user: user}
+  end
+
   def render("error.json", %{changeset: changeset}) do
     errors = Enum.map(changeset.errors, fn {field, detail} ->
       %{} |> Map.put(field, render_detail(detail))

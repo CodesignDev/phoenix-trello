@@ -12,4 +12,8 @@ defmodule PhoenixTrello.AuthView do
     %{error: "Invalid email or password"}
   end
 
+  def render("forbidden.json", %{error: error}) do
+    %{error: error}
+  end
+
 end
