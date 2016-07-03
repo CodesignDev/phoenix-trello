@@ -3,13 +3,26 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Helmet from 'react-helmet';
 import classnames from 'classnames';
-import { fetchBoards } from '../../redux/boards';
+import BoardForm from '../../components/Boards/Form';
+import { fetchBoards, showForm } from '../../redux/boards';
 
 class Index extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
 
     dispatch(fetchBoards());
+  }
+
+  handleAddButtonClick() {
+    const { dispatch } = this.props;
+
+    dispatch(showForm(true));
+  }
+
+  handleCancelClick() {
+    const { dispatch } = this.props;
+
+    dispatch(showForm(false));
   }
 
   renderOwnedBoards() {
@@ -40,6 +53,30 @@ class Index extends Component {
     return (
       <div className="boards-wrapper">
         {ownedBoards.map((board) => <span key={board.id}>{board.name}</span>)}
+        {::this.renderAddBoard()}
+      </div>
+    );
+  }
+
+  renderAddBoard() {
+    const { dispatch, showForm, formErrors } = this.props;
+
+    if (!showForm) return this.renderAddButton();
+
+    return (
+      <BoardForm
+        dispatch={dispatch}
+        errors={formErrors}
+        onCancelClick={::this.handleCancelClick} />
+    );
+  }
+
+  renderAddButton() {
+    return (
+      <div className="board add-new" onClick={::this.handleAddButtonClick}>
+        <div className="inner">
+          <a id="add_new_board">Add new board...</a>
+        </div>
       </div>
     );
   }
