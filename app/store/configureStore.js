@@ -21,7 +21,7 @@ export default function configureStore(initialState, history) {
     // though there are times in which it is useful, so it is left here for ease of use when that need
     // arises. Do not push this uncommented.
     // TODO: Make this an environment switch
-    // middleware.push(reactRouterReduxMiddleware, createLogger());
+    middleware.push(reactRouterReduxMiddleware, createLogger());
     middleware.push(reactRouterReduxMiddleware);
   } else {
     middleware.push(reactRouterReduxMiddleware);

@@ -25,6 +25,7 @@ export function userSignup(data = null) {
     axios.post('/api/v1/users', {user: data})
       .then((res) => {
         localStorage.setItem('token', res.data.jwt);
+        axios.defaults.headers.common['Authorization'] = res.data.jwt;
 
         dispatch(setCurrentUser(res.data.user));
 

@@ -78,6 +78,7 @@ export function userLogin(email, password) {
     axios.post('/api/v1/auth', {auth: data})
       .then(res => {
         localStorage.setItem('token', res.data.token);
+        axios.defaults.headers.common['Authorization'] = res.data.token;
         dispatch(setCurrentUser(res.data.user));
         dispatch(routerActions.push('/'));
       })
