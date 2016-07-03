@@ -18,6 +18,8 @@ defmodule PhoenixTrello.Router do
 
       post "/auth", AuthController, :create
       delete "/auth", AuthController, :delete
+
+      resources "/boards", BoardController, only: [:index, :create]
     end
   end
 end

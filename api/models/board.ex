@@ -10,6 +10,10 @@ defmodule PhoenixTrello.Board do
     timestamps()
   end
 
+  def preload_all(query) do
+    from b in query, preload: [:user]
+  end
+
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
