@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Helmet from 'react-helmet';
 import classnames from 'classnames';
+import BoardCard from '../../components/Boards/Card';
 import BoardForm from '../../components/Boards/Form';
 import { fetchBoards, showForm } from '../../redux/boards';
 
@@ -52,10 +53,23 @@ class Index extends Component {
 
     return (
       <div className="boards-wrapper">
-        {ownedBoards.map((board) => <span key={board.id}>{board.name}</span>)}
+        {::this.renderBoards(ownedBoards)}
         {::this.renderAddBoard()}
       </div>
     );
+  }
+
+  renderBoards(boards) {
+    const { dispatch } = this.props;
+
+    return boards.map((board) => {
+      return (
+        <BoardCard
+          key={board.id}
+          dispatch={dispatch}
+          {...board} />
+      );
+    });
   }
 
   renderAddBoard() {
