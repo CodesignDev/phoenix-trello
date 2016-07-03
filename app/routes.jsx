@@ -5,6 +5,7 @@ import Index from './containers/Index/Index';
 import AuthenticatedShell from './containers/AuthenticatedShell/AuthenticatedShell';
 import UserLogin from './components/UserLogin/UserLogin';
 import UserRegister from './components/UserRegister/UserRegister';
+import BoardView from './containers/BoardView/BoardView';
 
 /*
  * @param {Redux Store}
@@ -18,7 +19,8 @@ export default (store) => {
       <Route path="/register" component={UserRegister} />
 
       <Route path="/" component={AuthenticatedShell}>
-        <IndexRoute component={Index}  />
+        <IndexRoute component={Index} />
+        <Route path="/boards/:id" component={BoardView} />
       </Route>
     </Route>
   );

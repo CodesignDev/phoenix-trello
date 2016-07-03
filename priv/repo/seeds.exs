@@ -12,6 +12,7 @@
 
 alias PhoenixTrello.Repo
 alias PhoenixTrello.User
+alias PhoenixTrello.Board
 
 [
   %{
@@ -28,4 +29,13 @@ alias PhoenixTrello.User
   },
 ]
 |> Enum.map(&User.changeset(%User{}, &1))
+|> Enum.each(&Repo.insert!(&1))
+
+[
+  %{
+    name: "Test Board",
+    user_id: 1
+  },
+]
+|> Enum.map(&Board.changeset(%Board{}, &1))
 |> Enum.each(&Repo.insert!(&1))
