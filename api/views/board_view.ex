@@ -6,7 +6,11 @@ defmodule PhoenixTrello.BoardView do
   end
 
   def render("show.json", %{board: board}) do
-    board
+    %{
+      id: board.id,
+      name: board.name,
+      user_id: board.user_id
+    }
   end
 
   def render("error.json", %{changeset: changeset}) do
