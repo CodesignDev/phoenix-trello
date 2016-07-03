@@ -103,6 +103,7 @@ export function setCurrentUser(user) {
 
     const socket = new Socket(url.format(socketURL), {
       params: { token: localStorage.getItem('token') },
+      logger: (kind, msg, data) => { console.log(`${kind}: ${msg}`, data); }
     });
 
     socket.connect();
