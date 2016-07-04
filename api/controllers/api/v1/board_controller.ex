@@ -3,6 +3,7 @@ defmodule PhoenixTrello.BoardController do
 
   alias PhoenixTrello.Repo
   alias PhoenixTrello.Board
+  alias PhoenixTrello.UserBoard
 
   plug Guardian.Plug.EnsureAuthenticated, handler: PhoenixTrello.AuthController
 
@@ -25,15 +26,21 @@ defmodule PhoenixTrello.BoardController do
     |> build_assoc(:owned_boards)
     |> Board.changeset(board_params)
 
-    case Repo.insert(changeset) do
-      {:ok, board} ->
-        conn
-        |> put_status(:created)
-        |> render("show.json", board: board)
-      {:error, changeset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render("error.json", changset: changeset)
+    if changeset.valid? do
+      board = Repo.insert!(changeset)
+
+      board
+      |> build_assoc(:user_boards)
+      |> UserBoard.changeset(%{user_id: user.id})
+      |> Repo.insert!
+
+      conn
+      |> put_status(:created)
+      |> render("show.json", board: board)
+     else
+      conn
+      |> put_status(:unprocessable_entity)
+      |> render("error.json", changset: changeset)
     end
   end
 end

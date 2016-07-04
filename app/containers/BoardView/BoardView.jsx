@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { boardChannelConnect } from '../../redux/current_board';
+import BoardMembers from '../../components/Boards/Members';
+import { boardChannelConnect, boardChannelDisconnect } from '../../redux/current_board';
 
 class BoardView extends Component {
   componentDidMount() {
@@ -29,6 +30,24 @@ class BoardView extends Component {
     dispatch(boardChannelDisconnect(channel));
   }
 
+  renderMembers() {
+    const { dispatch, currentUser } = this.props;
+    const { user, members, connectedUsers, showUsersForm, channel, error } = this.props.currentBoard;
+    // const currentUserIsOwner = this.props.currentBoard.user.id === this.props.currentUser.id;
+    const currentUserIsOwner = user.id === currentUser.id;
+
+    return (
+      <BoardMembers
+        dispatch={dispatch}
+        members={members}
+        connectedUsers={connectedUsers}
+        currentUserIsOwner={currentUserIsOwner}
+        channel={channel}
+        error={error}
+        show={showUsersForm} />
+    );
+  }
+
   render() {
     const { fetching, name } = this.props.currentBoard;
 
@@ -44,6 +63,7 @@ class BoardView extends Component {
       <div className="view-container boards show">
         <header className="view-header">
           <h3>{name}</h3>
+          {::this.renderMembers()}
         </header>
         <div className="canvas-wrapper">
           <div className="canvas">

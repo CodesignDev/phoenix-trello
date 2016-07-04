@@ -1,13 +1,19 @@
 import { routerActions } from 'react-router-redux';
 
 const initialState = {
-  fetching: false,
-  channel: null
+  fetching: true,
+  channel: null,
+  connectedUsers: [],
+  showUsersForm: false,
+  error: null
 };
 
 export const CURRENT_BOARD_FETCHING = 'current_board_fetching';
 export const CURRENT_BOARD_REQUEST = 'current_board_request';
 export const CURRENT_BOARD_CHANNEL_CONNECTED = 'current_board_channel_created';
+export const CURRENT_BOARD_SHOW_MEMBERS_FORM = 'current_board_show_members_form';
+export const CURRENT_BOARD_ADD_MEMBER_ERROR = 'current_board_add_member_error';
+export const CURRENT_BOARD_MEMBER_ADDED = 'current_board_member_added';
 
 export function reducer(state = initialState, action = {}) {
   switch (action.type) {
@@ -28,6 +34,28 @@ export function reducer(state = initialState, action = {}) {
       return {
         ...state,
         channel: action.channel
+      };
+
+    case CURRENT_BOARD_SHOW_MEMBERS_FORM:
+      return {
+        ...state,
+        showUsersForm: action.show
+      };
+
+    case CURRENT_BOARD_ADD_MEMBER_ERROR:
+      return {
+        ...state,
+        error: action.error
+      };
+
+    case CURRENT_BOARD_MEMBER_ADDED:
+      const { members } = state;
+      members.push(action.user);
+
+      return {
+        ...state,
+        members,
+        showUsersForm: false
       };
 
     default:
@@ -55,6 +83,27 @@ function currentBoardChannelConnected(channel) {
   }
 }
 
+function addNewMemberError(error) {
+  return {
+    type: CURRENT_BOARD_ADD_MEMBER_ERROR,
+    error
+  };
+}
+
+export function showMembersForm(show) {
+  return {
+    type: CURRENT_BOARD_SHOW_MEMBERS_FORM,
+    show
+  };
+}
+
+function boardChannelMemberAdded(user) {
+  return {
+    type: CURRENT_BOARD_MEMBER_ADDED,
+    user
+  };
+}
+
 export function boardChannelConnect(socket, boardId) {
   return (dispatch) => {
     const channel = socket.channel(`board:${boardId}`);
@@ -66,5 +115,22 @@ export function boardChannelConnect(socket, boardId) {
         dispatch(currentBoardReceived(res.board));
         dispatch(currentBoardChannelConnected(channel));
       });
+
+    channel.on('member:added', msg => {
+      dispatch(boardChannelMemberAdded(msg.user));
+    })
   }
+}
+
+export function boardChannelDisconnect() {
+
+}
+
+export function addNewMember(channel, email) {
+  return dispatch => {
+    channel.push('members:add', { email })
+      .receive('error', data => {
+        dispatch(addNewMemberError(data.error));
+      });
+  };
 }

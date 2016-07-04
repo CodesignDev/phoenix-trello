@@ -2,6 +2,7 @@ import { routerActions } from 'react-router-redux';
 import { Socket } from 'phoenix';
 import url from 'url';
 import axios from 'axios';
+import { boardAdded } from './boards';
 
 const initialState = {
   token: null,
@@ -114,6 +115,10 @@ export function setCurrentUser(user) {
       .receive('ok', () => {
         dispatch(authSetSocket(socket, channel));
       });
+
+    channel.on('board:added', msg => {
+      dispatch(boardAdded(msg.board));
+    })
   }
 }
 

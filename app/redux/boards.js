@@ -5,6 +5,7 @@ const initialState = {
   fetching: false,
   creating: false,
   ownedBoards: [],
+  invitedBoards: [],
   error: null,
   showForm: false,
   formErrors: []
@@ -17,6 +18,7 @@ export const NEW_BOARD_CREATE_REQUEST = 'new_board_create_request';
 export const NEW_BOARD_CREATED = 'new_board_created';
 export const NEW_BOARD_CREATE_ERROR = 'new_board_create_error';
 export const SHOW_NEW_BOARD_FORM = 'show_new_board_form';
+export const BOARD_ADDED = 'board_added';
 
 export function reducer(state = initialState, action = {}) {
   switch (action.type) {
@@ -64,6 +66,13 @@ export function reducer(state = initialState, action = {}) {
       return {
         ...state,
         showForm: action.show
+      };
+
+    case BOARD_ADDED:
+      const { invitedBoards} = state;
+      return {
+        ...state,
+        invitedBoards: [action.board].concat(invitedBoards)
       };
 
     default:
@@ -115,6 +124,13 @@ export function showForm(show) {
   return {
     type: SHOW_NEW_BOARD_FORM,
     show
+  };
+}
+
+export function boardAdded(board) {
+  return {
+    type: BOARD_ADDED,
+    board
   };
 }
 
